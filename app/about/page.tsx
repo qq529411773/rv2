@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Heart, Users, Globe, Sparkles } from "lucide-react";
+import { useT } from "@/components/home/i18n";
 
 export default function AboutPage() {
+  const t = useT("about");
+
   return (
     <div className="pf-container" style={{ paddingTop: "48px" }}>
       <div className="max-w-4xl mx-auto">
@@ -12,24 +17,23 @@ export default function AboutPage() {
             style={{ background: "var(--amber-50)", color: "var(--amber-600)", border: "1px solid var(--amber-200)" }}
           >
             <span className="mr-1">🇨🇳</span>
-            Connecting Cultures Through Names
+            {t.badge}
           </div>
           <h1 style={{ fontFamily: "var(--font-display)" }}>
-            Bridging Cultures with{" "}
-            <span className="highlight">Meaningful Chinese Names</span>
+            {t.heroTitle1}{" "}
+            <span className="highlight">{t.heroTitle2}</span>
           </h1>
           <p className="mt-3 text-[1.05rem] max-w-[600px] mx-auto" style={{ color: "var(--text-s)" }}>
-            We believe that a name is more than just words — it&apos;s a bridge between cultures,
-            a reflection of identity, and a connection to the rich heritage of Chinese tradition.
+            {t.heroDesc}
           </p>
         </div>
 
         {/* Mission Cards */}
         <div className="grid gap-5 md:grid-cols-3 mb-12">
           {[
-            { icon: Heart, title: "Our Mission", desc: "To help people from all backgrounds discover meaningful Chinese names that reflect their personality while honoring traditional Chinese naming conventions." },
-            { icon: Users, title: "Our Community", desc: "We've helped thousands of people worldwide discover their perfect Chinese names, fostering cultural appreciation and personal connection." },
-            { icon: Globe, title: "Global Impact", desc: "From students studying abroad to business professionals, our platform serves people seeking authentic cultural connection worldwide." },
+            { icon: Heart, title: t.mission.title, desc: t.mission.desc },
+            { icon: Users, title: t.community.title, desc: t.community.desc },
+            { icon: Globe, title: t.global.title, desc: t.global.desc },
           ].map(({ icon: Icon, title, desc }, i) => (
             <div
               key={title}
@@ -64,7 +68,7 @@ export default function AboutPage() {
             style={{ fontFamily: "var(--font-display)" }}
           >
             <Sparkles size={24} style={{ color: "var(--amber-500)" }} />
-            Our Story
+            {t.ourStory.title}
           </h3>
           <div
             style={{
@@ -75,23 +79,9 @@ export default function AboutPage() {
             }}
           >
             <div className="space-y-4 text-[0.92rem] leading-relaxed" style={{ color: "var(--text-s)" }}>
-              <p>
-                Chinese Name Generator was born from a simple observation: in our increasingly
-                connected world, many people desire meaningful connections to Chinese culture,
-                but finding an authentic Chinese name that truly represents their identity can be challenging.
-              </p>
-              <p>
-                Traditional Chinese naming is a beautiful art form that considers not just the sound
-                of a name, but its meaning, cultural significance, and how it reflects the person&apos;s
-                character and aspirations. Our advanced AI technology combines this ancient wisdom
-                with modern personalization to create names that are both culturally authentic and personally meaningful.
-              </p>
-              <p>
-                Whether you&apos;re a student preparing for study in China, a professional working with
-                Chinese colleagues, or simply someone fascinated by Chinese culture, we&apos;re here to
-                help you discover a name that truly represents who you are while honoring the rich
-                traditions of Chinese naming conventions.
-              </p>
+              <p>{t.ourStory.p1}</p>
+              <p>{t.ourStory.p2}</p>
+              <p>{t.ourStory.p3}</p>
             </div>
           </div>
         </section>
@@ -102,21 +92,21 @@ export default function AboutPage() {
             className="text-[clamp(1.5rem,3vw,2rem)] font-extrabold tracking-tight mb-5"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Our Values
+            {t.ourValues.title}
           </h3>
           <div className="grid gap-5 md:grid-cols-2">
             {[
-              { num: "1", title: "Cultural Authenticity", desc: "Every name we generate respects traditional Chinese naming conventions and cultural significance." },
-              { num: "2", title: "Personal Meaning", desc: "We believe names should reflect who you are. Our AI considers your personality and preferences." },
-              { num: "3", title: "Educational Value", desc: "Beyond just providing names, we help users understand the meaning and cultural context." },
-              { num: "4", title: "Accessibility", desc: "We make Chinese name generation accessible to everyone, regardless of their background." },
-            ].map((v) => (
-              <div key={v.num} className="flex gap-3">
+              t.ourValues.v1,
+              t.ourValues.v2,
+              t.ourValues.v3,
+              t.ourValues.v4,
+            ].map((v, i) => (
+              <div key={i} className="flex gap-3">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center text-[0.8rem] font-bold shrink-0"
                   style={{ background: "var(--amber-50)", color: "var(--amber-600)" }}
                 >
-                  {v.num}
+                  {i + 1}
                 </div>
                 <div>
                   <h4 className="font-semibold text-[0.92rem] mb-1">{v.title}</h4>
@@ -138,14 +128,13 @@ export default function AboutPage() {
           }}
         >
           <h3 className="text-[1.4rem] font-extrabold mb-3" style={{ fontFamily: "var(--font-display)" }}>
-            Ready to Discover Your Chinese Name?
+            {t.cta.title}
           </h3>
           <p className="text-[0.9rem] mb-5 max-w-[500px] mx-auto" style={{ color: "var(--text-s)" }}>
-            Join thousands of others who have found their perfect Chinese name.
-            Start your cultural journey today.
+            {t.cta.desc}
           </p>
           <Link href="/" className="pf-btn pf-btn-primary pf-btn-xl">
-            Get Started Now
+            {t.cta.button}
           </Link>
         </div>
       </div>

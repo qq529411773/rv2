@@ -190,6 +190,53 @@ const en = {
       paymentFailedDesc: "Failed to process payment. Please try again.",
     },
   },
+  about: {
+    badge: "Connecting Cultures Through Names",
+    heroTitle1: "Bridging Cultures with",
+    heroTitle2: "Meaningful Chinese Names",
+    heroDesc: "We believe that a name is more than just words — it's a bridge between cultures, a reflection of identity, and a connection to the rich heritage of Chinese tradition.",
+    mission: { title: "Our Mission", desc: "To help people from all backgrounds discover meaningful Chinese names that reflect their personality while honoring traditional Chinese naming conventions." },
+    community: { title: "Our Community", desc: "We've helped thousands of people worldwide discover their perfect Chinese names, fostering cultural appreciation and personal connection." },
+    global: { title: "Global Impact", desc: "From students studying abroad to business professionals, our platform serves people seeking authentic cultural connection worldwide." },
+    ourStory: {
+      title: "Our Story",
+      p1: "Chinese Name Generator was born from a simple observation: in our increasingly connected world, many people desire meaningful connections to Chinese culture, but finding an authentic Chinese name that truly represents their identity can be challenging.",
+      p2: "Traditional Chinese naming is a beautiful art form that considers not just the sound of a name, but its meaning, cultural significance, and how it reflects the person's character and aspirations. Our advanced AI technology combines this ancient wisdom with modern personalization to create names that are both culturally authentic and personally meaningful.",
+      p3: "Whether you're a student preparing for study in China, a professional working with Chinese colleagues, or simply someone fascinated by Chinese culture, we're here to help you discover a name that truly represents who you are while honoring the rich traditions of Chinese naming conventions.",
+    },
+    ourValues: {
+      title: "Our Values",
+      v1: { title: "Cultural Authenticity", desc: "Every name we generate respects traditional Chinese naming conventions and cultural significance." },
+      v2: { title: "Personal Meaning", desc: "We believe names should reflect who you are. Our AI considers your personality and preferences." },
+      v3: { title: "Educational Value", desc: "Beyond just providing names, we help users understand the meaning and cultural context." },
+      v4: { title: "Accessibility", desc: "We make Chinese name generation accessible to everyone, regardless of their background." },
+    },
+    cta: { title: "Ready to Discover Your Chinese Name?", desc: "Join thousands of others who have found their perfect Chinese name. Start your cultural journey today.", button: "Get Started Now" },
+    // product/about page
+    productAbout: {
+      heroTitle: "About ChineseName.club",
+      heroSubtitle: "Connecting cultures through meaningful AI-generated Chinese names",
+      ourMission: { title: "Our Mission", p1: "We believe that a name is more than just a way to address someone — it's a connection to culture, history, and identity. ChineseName.club helps people from around the world bridge cultural gaps by providing them with meaningful Chinese names that resonate with their personalities and preferences.", p2: "Using advanced artificial intelligence technology, we analyze your personal traits, interests, and preferences to generate names that are not just phonetically pleasing but also carry deep cultural significance and positive meanings in Chinese tradition." },
+      howItWorks: {
+        title: "How Our AI Works",
+        step1: { title: "Input Analysis", desc: "Our AI analyzes your English name, gender preference, and personality traits to understand your unique characteristics." },
+        step2: { title: "Cultural Matching", desc: "Advanced algorithms match your profile with appropriate Chinese characters that carry positive meanings and cultural significance." },
+        step3: { title: "Name Generation", desc: "Generate multiple personalized Chinese names with detailed meanings, pronunciations, and cultural context." },
+      },
+      whyChoose: {
+        title: "Why Choose Chinese Names?",
+        p1: "In Chinese culture, names hold immense significance. They're carefully chosen to reflect aspirations, virtues, and qualities. A meaningful Chinese name can:",
+        items: ["Help you connect more authentically with Chinese friends, colleagues, and communities", "Demonstrate respect and appreciation for Chinese culture and traditions", "Make your experience in China or with Chinese speakers more immersive and personal", "Provide you with a unique perspective on your identity and cultural connections", "Enhance your language learning journey if you're studying Chinese", "Create meaningful connections in business and personal relationships"],
+      },
+      serviceOptions: {
+        title: "Service Options",
+        free: { title: "Free Version", tag: "Free", desc: "Get started with our basic Chinese name generation service. Perfect for exploring what a Chinese name might mean for you.", items: ["Limited daily name generations", "Basic name meanings", "Standard pronunciation guides", "No account required"] },
+        premium: { title: "Premium Version", tag: "Paid", desc: "Unlock the full potential of our AI with unlimited access and advanced features for the most meaningful name experience.", items: ["Unlimited name generations", "Detailed cultural meanings", "Advanced pronunciation guides", "Character analysis & etymology", "Priority customer support", "Export and save functionality"] },
+      },
+      contact: { title: "Contact & Support", desc: "Have questions about our AI Chinese name generator or need assistance? Our team is here to help.", getInTouch: "Get in Touch", quickLinks: "Quick Links", email: "Email:", website: "Website:", privacy: "Privacy Policy", terms: "Terms of Use" },
+      cta: "Generate Your Chinese Name Now",
+    },
+  },
 };
 
 const zh = {
@@ -363,6 +410,52 @@ const zh = {
       paymentFailedDesc: "支付处理失败，请重试。",
     },
   },
+  about: {
+    badge: "通过名字连接文化",
+    heroTitle1: "用有意义的",
+    heroTitle2: "中文名字搭建文化桥梁",
+    heroDesc: "我们相信名字不仅仅是文字——它是文化之间的桥梁，是身份的映射，是与中国丰富传统文化遗产的连接。",
+    mission: { title: "我们的使命", desc: "帮助来自不同背景的人们发现有意义的中文名字，反映他们的个性，同时尊重中国传统命名习俗。" },
+    community: { title: "我们的社区", desc: "我们已经帮助全球数千人发现属于他们的完美中文名字，促进文化欣赏和个人连接。" },
+    global: { title: "全球影响", desc: "从出国留学的学生到商业专业人士，我们的平台服务于全球寻求真实文化联系的人们。" },
+    ourStory: {
+      title: "我们的故事",
+      p1: "中文名字生成器源自一个简单的观察：在这个日益紧密联系的世界里，许多人渴望与中国文化建立有意义的连接，但找到一个真正代表他们身份的真实中文名字却充满挑战。",
+      p2: "传统的中国命名是一门美丽的艺术，它不仅考虑名字的发音，还考虑其含义、文化意义以及它如何反映一个人的品格和志向。我们先进的人工智能技术将这一古老的智慧与现代个性化相结合，创造出既具有文化真实性又具有个人意义的名字。",
+      p3: "无论你是准备到中国留学的学生、与中国同事合作的专业人士，还是仅仅对中国文化着迷的人，我们都在这里帮助你发现一个真正代表你的名字，同时尊重丰富的中国命名传统。",
+    },
+    ourValues: {
+      title: "我们的价值观",
+      v1: { title: "文化真实性", desc: "我们生成的每个名字都尊重传统的中国命名习俗和文化意义。" },
+      v2: { title: "个人意义", desc: "我们相信名字应该反映你是谁。我们的 AI 考虑你的性格和偏好。" },
+      v3: { title: "教育价值", desc: "除了提供名字，我们还帮助用户理解名字的含义和文化背景。" },
+      v4: { title: "可及性", desc: "我们让中文名字生成对每个人来说都触手可及，无论他们的背景如何。" },
+    },
+    cta: { title: "准备好发现你的中文名字了吗？", desc: "加入成千上万已经找到完美中文名字的人。今天就开始你的文化之旅。", button: "立即开始" },
+    productAbout: {
+      heroTitle: "关于 ChineseName.club",
+      heroSubtitle: "通过有意义的 AI 生成的中文名字连接文化",
+      ourMission: { title: "我们的使命", p1: "我们相信名字不仅仅是称呼一个人的方式——它是与文化、历史和身份的联系。ChineseName.club 帮助来自世界各地的人们弥合文化差距，为他们提供与个性和偏好相呼应的有意义的中文名字。", p2: "使用先进的人工智能技术，我们分析你的个人特质、兴趣和偏好，生成不仅在语音上悦耳动听、而且在中国传统中具有深远文化意义和积极含义的名字。" },
+      howItWorks: {
+        title: "我们的 AI 如何工作",
+        step1: { title: "输入分析", desc: "我们的 AI 分析你的英文名字、性别偏好和性格特征，以了解你的独特特点。" },
+        step2: { title: "文化匹配", desc: "高级算法将你的个人资料与具有积极含义和文化意义的适当汉字进行匹配。" },
+        step3: { title: "名字生成", desc: "生成多个个性化的中文名字，附有详细含义、发音和文化背景。" },
+      },
+      whyChoose: {
+        title: "为什么选择中文名字？",
+        p1: "在中国文化中，名字具有极为重要的意义。它们经过精心选择，以反映志向、美德和品质。一个有意义的中国名字可以：",
+        items: ["帮助你更真实地与中国朋友、同事和社区建立联系", "展示对中国文化和传统的尊重与欣赏", "让你在中国或与中文使用者的交流体验更加沉浸和个人化", "为你提供独特的身份视角和文化连接", "如果你正在学习中文，增强你的语言学习之旅", "在商业和个人关系中创造有意义的连接"],
+      },
+      serviceOptions: {
+        title: "服务选项",
+        free: { title: "免费版", tag: "免费", desc: "开始使用我们的基础中文名字生成服务。非常适合探索中文名字对你意味着什么。", items: ["每日有限的名字生成次数", "基础名字含义", "标准发音指南", "无需注册"] },
+        premium: { title: "高级版", tag: "付费", desc: "通过无限访问和高级功能，充分发挥我们 AI 的潜力，获得最有意义的名字体验。", items: ["无限名字生成", "详细文化含义", "高级发音指南", "汉字分析与词源", "优先客户支持", "导出和保存功能"] },
+      },
+      contact: { title: "联系与支持", desc: "对我们的 AI 中文名字生成器有疑问或需要帮助？我们的团队随时为你服务。", getInTouch: "联系我们", quickLinks: "快速链接", email: "邮箱：", website: "网站：", privacy: "隐私政策", terms: "使用条款" },
+      cta: "立即生成你的中文名字",
+    },
+  },
 };
 
 const es = {
@@ -534,6 +627,52 @@ const es = {
       signInRequiredDesc: "Inicia sesión para comprar créditos.",
       paymentFailed: "Pago Fallido",
       paymentFailedDesc: "Error al procesar el pago. Inténtalo de nuevo.",
+    },
+  },
+  about: {
+    badge: "Conectando Culturas a Través de Nombres",
+    heroTitle1: "Uniendo Culturas con",
+    heroTitle2: "Nombres Chinos Significativos",
+    heroDesc: "Creemos que un nombre es más que palabras — es un puente entre culturas, un reflejo de identidad y una conexión con la rica herencia de la tradición china.",
+    mission: { title: "Nuestra Misión", desc: "Ayudar a personas de todos los orígenes a descubrir nombres chinos significativos que reflejen su personalidad, respetando las convenciones tradicionales de nombres chinos." },
+    community: { title: "Nuestra Comunidad", desc: "Hemos ayudado a miles de personas en todo el mundo a descubrir sus nombres chinos perfectos, fomentando la apreciación cultural y la conexión personal." },
+    global: { title: "Impacto Global", desc: "Desde estudiantes en el extranjero hasta profesionales de negocios, nuestra plataforma sirve a personas que buscan una conexión cultural auténtica en todo el mundo." },
+    ourStory: {
+      title: "Nuestra Historia",
+      p1: "El Generador de Nombres Chinos nació de una simple observación: en nuestro mundo cada vez más conectado, muchas personas desean conexiones significativas con la cultura china, pero encontrar un nombre chino auténtico que realmente represente su identidad puede ser un desafío.",
+      p2: "La denominación tradicional china es una hermosa forma de arte que considera no solo el sonido de un nombre, sino su significado, importancia cultural y cómo refleja el carácter y las aspiraciones de la persona. Nuestra avanzada tecnología de IA combina esta sabiduría ancestral con la personalización moderna.",
+      p3: "Ya seas un estudiante preparándose para estudiar en China, un profesional trabajando con colegas chinos, o simplemente alguien fascinado por la cultura china, estamos aquí para ayudarte a descubrir un nombre que realmente te represente.",
+    },
+    ourValues: {
+      title: "Nuestros Valores",
+      v1: { title: "Autenticidad Cultural", desc: "Cada nombre que generamos respeta las convenciones tradicionales de nombres chinos y su significado cultural." },
+      v2: { title: "Significado Personal", desc: "Creemos que los nombres deben reflejar quién eres. Nuestra IA considera tu personalidad y preferencias." },
+      v3: { title: "Valor Educativo", desc: "Más allá de solo proporcionar nombres, ayudamos a los usuarios a comprender el significado y el contexto cultural." },
+      v4: { title: "Accesibilidad", desc: "Hacemos que la generación de nombres chinos sea accesible para todos, independientemente de su origen." },
+    },
+    cta: { title: "¿Listo para Descubrir Tu Nombre Chino?", desc: "Únete a miles de personas que han encontrado su nombre chino perfecto. Comienza tu viaje cultural hoy.", button: "Comenzar Ahora" },
+    productAbout: {
+      heroTitle: "Acerca de ChineseName.club",
+      heroSubtitle: "Conectando culturas a través de nombres chinos significativos generados por IA",
+      ourMission: { title: "Nuestra Misión", p1: "Creemos que un nombre es más que una forma de dirigirse a alguien — es una conexión con la cultura, la historia y la identidad. ChineseName.club ayuda a personas de todo el mundo a superar las brechas culturales proporcionándoles nombres chinos significativos.", p2: "Utilizando tecnología avanzada de inteligencia artificial, analizamos tus rasgos personales, intereses y preferencias para generar nombres que no solo son fonéticamente agradables, sino que también tienen un profundo significado cultural." },
+      howItWorks: {
+        title: "Cómo Funciona Nuestra IA",
+        step1: { title: "Análisis de Entrada", desc: "Nuestra IA analiza tu nombre en inglés, preferencia de género y rasgos de personalidad para comprender tus características únicas." },
+        step2: { title: "Coincidencia Cultural", desc: "Algoritmos avanzados emparejan tu perfil con caracteres chinos apropiados que tienen significados positivos y relevancia cultural." },
+        step3: { title: "Generación de Nombres", desc: "Genera múltiples nombres chinos personalizados con significados detallados, pronunciaciones y contexto cultural." },
+      },
+      whyChoose: {
+        title: "¿Por Qué Elegir Nombres Chinos?",
+        p1: "En la cultura china, los nombres tienen un inmenso significado. Se eligen cuidadosamente para reflejar aspiraciones, virtudes y cualidades. Un nombre chino significativo puede:",
+        items: ["Ayudarte a conectar más auténticamente con amigos, colegas y comunidades chinas", "Demostrar respeto y aprecio por la cultura y tradiciones chinas", "Hacer tu experiencia en China o con hablantes de chino más inmersiva y personal", "Proporcionarte una perspectiva única sobre tu identidad y conexiones culturales", "Mejorar tu viaje de aprendizaje de idiomas si estás estudiando chino", "Crear conexiones significativas en relaciones comerciales y personales"],
+      },
+      serviceOptions: {
+        title: "Opciones de Servicio",
+        free: { title: "Versión Gratuita", tag: "Gratis", desc: "Comienza con nuestro servicio básico de generación de nombres chinos. Perfecto para explorar lo que un nombre chino podría significar para ti.", items: ["Generaciones diarias limitadas", "Significados básicos del nombre", "Guías de pronunciación estándar", "Sin necesidad de cuenta"] },
+        premium: { title: "Versión Premium", tag: "Pago", desc: "Desbloquea todo el potencial de nuestra IA con acceso ilimitado y funciones avanzadas para la experiencia de nombre más significativa.", items: ["Generaciones ilimitadas", "Significados culturales detallados", "Guías de pronunciación avanzadas", "Análisis de caracteres y etimología", "Soporte prioritario", "Exportación y guardado"] },
+      },
+      contact: { title: "Contacto y Soporte", desc: "¿Tienes preguntas sobre nuestro generador de nombres chinos con IA o necesitas ayuda? Nuestro equipo está aquí para ayudarte.", getInTouch: "Contacto", quickLinks: "Enlaces Rápidos", email: "Correo:", website: "Sitio web:", privacy: "Política de Privacidad", terms: "Términos de Uso" },
+      cta: "Genera Tu Nombre Chino Ahora",
     },
   },
 };
