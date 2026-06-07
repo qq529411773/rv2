@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import RandomNameGenerator from "@/components/product/random/random-name-generator";
 
@@ -9,33 +8,33 @@ export default function RandomNameGeneratorPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white">
+    <div>
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.push('/')}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Home
-            </Button>
-            <div className="flex-1 text-center">
-              <h1 className="text-2xl md:text-3xl font-bold text-violet-900">
-                Random Name Generator
-              </h1>
-              <p className="text-violet-600 mt-1">
-                Generate beautiful Chinese names instantly
-              </p>
-            </div>
+      <div className="pf-header sticky top-0 z-40" style={{ height: "56px" }}>
+        <div className="pf-header-inner" style={{ height: "56px" }}>
+          <button
+            onClick={() => router.push("/")}
+            className="pf-btn pf-btn-secondary pf-btn-sm"
+            style={{ gap: "6px" }}
+          >
+            <ArrowLeft size={16} />
+            Back to Home
+          </button>
+          <div style={{ textAlign: "center", flex: 1 }}>
+            <span className="text-[1rem] font-extrabold" style={{ fontFamily: "var(--font-display)" }}>
+              Random Name Generator
+            </span>
           </div>
+          <div style={{ width: "80px" }} />
         </div>
-      </header>
+      </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="pf-container" style={{ paddingTop: "32px" }}>
+        <div className="text-center mb-6">
+          <p className="text-[0.9rem]" style={{ color: "var(--text-s)" }}>
+            Generate beautiful Chinese names instantly
+          </p>
+        </div>
         <RandomNameGenerator />
       </div>
     </div>

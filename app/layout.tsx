@@ -1,9 +1,9 @@
-import Header from "@/components/header";
 import { Footer } from "@/components/footer";
-import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import { createClient } from "@/utils/supabase/server";
+import Header from "@/components/header";
+import { BackgroundEffects } from "@/components/home/BackgroundEffects";
+import { ScrollReveal } from "@/components/home/ScrollReveal";
 import { Toaster } from "@/components/ui/toaster";
+import { createClient } from "@/utils/supabase/server";
 import "./globals.css";
 
 const baseUrl = process.env.BASE_URL
@@ -12,26 +12,22 @@ const baseUrl = process.env.BASE_URL
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
-  title: "ChineseName.club - AI Chinese Name Generator",
-  description: "Discover your perfect Chinese name with our AI-powered generator. Get personalized names based on your personality, with cultural significance and detailed meanings.",
-  keywords: "Chinese name generator, AI name generator, Chinese names, cultural names, personalized names, Chinese identity",
+  title: "PicFlow AI — AI-Driven Image Creation",
+  description:
+    "AI-Driven Image Creation for Social & E-commerce Scenarios. No registration needed. Unlimited free generation.",
+  keywords:
+    "AI image generation, social media images, e-commerce images, PicFlow",
   openGraph: {
-    title: "ChineseName.club - AI Chinese Name Generator",
-    description: "Discover your perfect Chinese name with our AI-powered generator. Get personalized names based on your personality, with cultural significance and detailed meanings.",
+    title: "PicFlow AI — AI-Driven Image Creation",
+    description: "AI-Driven Image Creation for Social & E-commerce Scenarios.",
     type: "website",
     url: baseUrl,
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "ChineseName.club - AI Chinese Name Generator",
-    description: "Discover your perfect Chinese name with our AI-powered generator.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
   },
 };
-
-const geistSans = Geist({
-  display: "swap",
-  subsets: ["latin"],
-});
 
 export default async function RootLayout({
   children,
@@ -44,21 +40,23 @@ export default async function RootLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem("pf-theme");(t==="dark"||(!t&&matchMedia("(prefers-color-scheme:dark)").matches))&&document.documentElement.setAttribute("data-theme","dark")})()`,
+          }}
+        />
+      </head>
       <body className="bg-background text-foreground">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="relative min-h-screen">
-            <Header user={user} />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <Toaster />
-        </ThemeProvider>
+        <BackgroundEffects />
+        <ScrollReveal />
+        <div className="relative z-10">
+          <Header user={user} />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
+        <Toaster />
       </body>
     </html>
   );

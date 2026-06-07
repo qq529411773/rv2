@@ -1,5 +1,6 @@
 "use client";
 
+import { signOutAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -10,15 +11,32 @@ import {
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { signOutAction } from "@/app/actions";
+
+type NavMessages = {
+  home: string;
+  generate: string;
+  templates: string;
+  pricing: string;
+  account: string;
+  startCreate: string;
+};
 
 interface MobileNavProps {
   items: { label: string; href: string }[];
   user: any;
   isDashboard: boolean;
+  t: NavMessages;
 }
 
-export function MobileNav({ items, user, isDashboard }: MobileNavProps) {
+export function MobileNav({ items, user, isDashboard, t }: MobileNavProps) {
+  const labelMap: Record<string, keyof NavMessages> = {
+    "/": "home",
+    "/homes": "generate",
+    "/generate": "generate",
+    "/templates": "templates",
+    "/product/about": "pricing",
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -38,7 +56,8 @@ export function MobileNav({ items, user, isDashboard }: MobileNavProps) {
               href={item.href}
               className="text-lg font-semibold text-muted-foreground transition-colors hover:text-primary"
             >
-              {item.label}
+              <span>{item.label}</span>{" "}
+              <span>{t[labelMap[item.href] || "home"]}</span>
             </Link>
           ))}
         </nav>
