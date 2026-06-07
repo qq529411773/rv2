@@ -1,22 +1,22 @@
 "use client";
 
-import { useState } from "react";
-import { useT } from "@/components/home/i18n";
+import { GenerateButton } from "@/components/generate/GenerateButton";
 import { PromptInput } from "@/components/generate/PromptInput";
+import { ResultGrid, type Result } from "@/components/generate/ResultGrid";
 import { SizeSelector } from "@/components/generate/SizeSelector";
 import { StyleSelector } from "@/components/generate/StyleSelector";
-import { GenerateButton } from "@/components/generate/GenerateButton";
-import { ResultGrid } from "@/components/generate/ResultGrid";
 import { UsageBadge } from "@/components/generate/UsageBadge";
+import { useT } from "@/components/home/i18n";
+import { useState } from "react";
 
-type ResultState = "empty" | "loading" | "done";
+const EMPTY_RESULTS: Result[] = [
+  { state: "empty", imageUrl: "", label: "" },
+  { state: "empty", imageUrl: "", label: "" },
+  { state: "empty", imageUrl: "", label: "" },
+  { state: "empty", imageUrl: "", label: "" },
+];
 
-interface Result {
-  state: ResultState;
-  emoji: string;
-  label: string;
-  colors: string[];
-}
+const LABELS = ["主图", "变体-角度", "变体-细节", "变体-全景"];
 
 export default function GeneratePage() {
   const t = useT("generate");
@@ -26,42 +26,57 @@ export default function GeneratePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [usage, setUsage] = useState(5);
   const [previewIdx, setPreviewIdx] = useState<number | null>(null);
+  const [results, setResults] = useState<Result[]>(EMPTY_RESULTS);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const [results, setResults] = useState<Result[]>([
-    { state: "empty", emoji: "", label: "", colors: [] },
-    { state: "empty", emoji: "", label: "", colors: [] },
-    { state: "empty", emoji: "", label: "", colors: [] },
-    { state: "empty", emoji: "", label: "", colors: [] },
-  ]);
+  const generateImages = async () => {
+    if (usage <= 0 || !prompt.trim()) return;
 
-  const generateImages = () => {
-    if (usage <= 0) return;
     setIsGenerating(true);
     setUsage((u) => u - 1);
+    setErrorMsg(null);
+    setResults(EMPTY_RESULTS.map((r) => ({ ...r, state: "loading" as const })));
 
-    const genData = [
-      { emoji: "🎨", label: "主图", colors: ["#FEF3C7", "#FDE68A", "#FCD34D"] },
-      { emoji: "🌈", label: "变体-角度", colors: ["#DBEAFE", "#BFDBFE", "#93C5FD"] },
-      { emoji: "✨", label: "变体-细节", colors: ["#FCE7F3", "#FBCFE8", "#F9A8D4"] },
-      { emoji: "🌟", label: "变体-全景", colors: ["#D1FAE5", "#A7F3D0", "#6EE7B7"] },
-    ];
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: prompt.trim(),
+          size: selectedSize,
+          style: selectedStyle,
+          count: 4,
+        }),
+      });
 
-    setResults(results.map((r) => ({ ...r, state: "loading" })));
+      const data = await response.json();
 
-    genData.forEach((item, idx) => {
-      setTimeout(() => {
-        setResults((prev) => {
-          const next = [...prev];
-          next[idx] = { state: "done", ...item };
-          return next;
-        });
-      }, 600 + idx * 300);
-    });
+      if (!response.ok || !data.images) {
+        const msg = data?.message || `Server error (${response.status})`;
+        console.error("[Generate] API error:", msg);
+        setErrorMsg(msg);
+        setResults(
+          EMPTY_RESULTS.map((r) => ({ ...r, state: "empty" as const })),
+        );
+        return;
+      }
 
-    setTimeout(() => {
+      setResults(
+        data.images.map((url: string, i: number) => ({
+          state: "done" as const,
+          imageUrl: url,
+          label: LABELS[i] ?? `图片 ${i + 1}`,
+        })),
+      );
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Network error";
+      console.error("[Generate] Request failed:", error);
+      setErrorMsg(msg);
+      setResults(EMPTY_RESULTS.map((r) => ({ ...r, state: "empty" as const })));
+    } finally {
       setIsGenerating(false);
       setUsage((u) => Math.min(u + 2, 8));
-    }, 2200);
+    }
   };
 
   return (
@@ -95,6 +110,21 @@ export default function GeneratePage() {
 
         {/* RIGHT PANEL — RESULTS */}
         <div>
+          {errorMsg && (
+            <div
+              style={{
+                background: "var(--red-50, #FEF2F2)",
+                border: "1px solid var(--red-200, #FECACA)",
+                color: "var(--red-700, #B91C1C)",
+                borderRadius: "var(--radius-lg)",
+                padding: "12px 16px",
+                marginBottom: "12px",
+                fontSize: "0.85rem",
+              }}
+            >
+              {errorMsg}
+            </div>
+          )}
           <ResultGrid
             results={results}
             previewIdx={previewIdx}

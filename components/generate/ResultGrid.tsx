@@ -4,11 +4,10 @@ import { useT } from "@/components/home/i18n";
 
 type ResultState = "empty" | "loading" | "done";
 
-interface Result {
+export interface Result {
   state: ResultState;
-  emoji: string;
+  imageUrl: string;
   label: string;
-  colors: string[];
 }
 
 interface ResultGridProps {
@@ -21,11 +20,23 @@ interface ResultGridProps {
 function PreviewModal({ result, onClose }: { result: Result; onClose: () => void }) {
   const t = useT("generate");
 
+  const handleDownload = () => {
+    if (!result.imageUrl) return;
+    const a = document.createElement("a");
+    a.href = result.imageUrl;
+    a.download = `picflow-${Date.now()}.png`;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   return (
     <div
       className="fixed inset-0 z-[200] flex items-center justify-center"
       style={{
-        background: "rgba(0,0,0,0.65)",
+        background: "rgba(0,0,0,0.75)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
       }}
@@ -35,27 +46,35 @@ function PreviewModal({ result, onClose }: { result: Result; onClose: () => void
         onClick={(e) => e.stopPropagation()}
         className="relative"
         style={{
-          background: `linear-gradient(135deg,${result.colors[0]},${result.colors[1]})`,
+          background: "var(--bg-card)",
           borderRadius: "var(--radius-2xl)",
-          padding: "48px 56px",
-          maxWidth: "520px",
-          width: "90%",
+          padding: "24px",
+          maxWidth: "90vw",
+          maxHeight: "90vh",
+          width: "auto",
           boxShadow: "0 32px 80px rgba(0,0,0,0.4)",
           textAlign: "center",
           animation: "previewEnter 0.4s var(--ease-smooth) both",
         }}
       >
-        <div style={{ fontSize: "6rem", lineHeight: 1.2, marginBottom: "12px" }}>
-          {result.emoji}
-        </div>
-        <div style={{ fontSize: "1.15rem", fontWeight: 600, color: "rgba(0,0,0,0.65)", marginBottom: "20px" }}>
+        <img
+          src={result.imageUrl}
+          alt={result.label}
+          style={{
+            maxWidth: "100%",
+            maxHeight: "70vh",
+            borderRadius: "var(--radius-lg)",
+            objectFit: "contain",
+          }}
+        />
+        <div style={{ fontSize: "0.95rem", fontWeight: 600, marginTop: "16px", color: "var(--text-p)" }}>
           {result.label}
         </div>
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-3 mt-4">
           <button
             className="btn btn-primary btn-lg"
             style={{ fontSize: "0.9rem", padding: "10px 28px" }}
-            onClick={() => {}}
+            onClick={handleDownload}
           >
             {t.downloadImage}
           </button>
@@ -78,6 +97,13 @@ function PreviewModal({ result, onClose }: { result: Result; onClose: () => void
     </div>
   );
 }
+
+const PLACEHOLDER_COLORS = [
+  ["#FEF3C7", "#FDE68A"],
+  ["#DBEAFE", "#93C5FD"],
+  ["#FCE7F3", "#F9A8D4"],
+  ["#D1FAE5", "#6EE7B7"],
+];
 
 export function ResultGrid({ results, previewIdx, onPreview, onClosePreview }: ResultGridProps) {
   const t = useT("generate");
@@ -110,16 +136,40 @@ export function ResultGrid({ results, previewIdx, onPreview, onClosePreview }: R
                 className="gen-result"
                 onClick={() => onPreview(i)}
                 style={{
-                  background: `linear-gradient(135deg,${r.colors[0]},${r.colors[1]})`,
+                  background: `linear-gradient(135deg,${PLACEHOLDER_COLORS[i][0]},${PLACEHOLDER_COLORS[i][1]})`,
                   cursor: "pointer",
+                  position: "relative",
                 }}
               >
-                <div style={{ fontSize: "3rem" }}>{r.emoji}</div>
-                <div className="glabel">{r.label}</div>
+                {r.imageUrl ? (
+                  <img
+                    src={r.imageUrl}
+                    alt={r.label}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "inherit",
+                      position: "absolute",
+                      inset: 0,
+                    }}
+                  />
+                ) : null}
+                <div className="glabel" style={{ position: "relative", zIndex: 1 }}>{r.label}</div>
                 <div className="overlay" onClick={(e) => e.stopPropagation()}>
-                  <button className="act" title={t.downloadImage} onClick={() => {}}>⬇️</button>
-                  <button className="act" title={t.close} onClick={() => onPreview(i)}>🔍</button>
-                  <button className="act" title={t.share ?? "Share"} onClick={() => {}}>↗️</button>
+                  <button className="act" title={t.downloadImage} onClick={() => {
+                    if (r.imageUrl) {
+                      const a = document.createElement("a");
+                      a.href = r.imageUrl;
+                      a.download = `picflow-${Date.now()}.png`;
+                      a.target = "_blank";
+                      a.rel = "noopener noreferrer";
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+                    }
+                  }}>⬇️</button>
+                  <button className="act" title={t.share ?? "Share"} onClick={() => onPreview(i)}>🔍</button>
                 </div>
               </div>
             )}
