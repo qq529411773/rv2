@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const ARK_BASE_URL = 'https://ark.cn-beijing.volces.com/api/v3'
-const ARK_API_KEY = process.env.ARK_API_KEY!
-const IMAGE_MODEL = process.env.IMAGE_MODEL || 'doubao-seedream-5-0-260128'
-
 const SIZE_MAP: Record<string, string> = {
   '9:16': '2K',
   '1:1': '2K',
@@ -26,18 +22,24 @@ const ANGLE_VARIATIONS = [
   'creative angle, dynamic perspective',
 ]
 
-async function generateSingleImage(prompt: string, sizeVal: string, variation: string): Promise<string | null> {
+async function generateSingleImage(
+  apiKey: string,
+  model: string,
+  prompt: string,
+  sizeVal: string,
+  variation: string,
+): Promise<string | null> {
   const variedPrompt = `${prompt}, ${variation}`
 
   try {
-    const arkResponse = await fetch(`${ARK_BASE_URL}/images/generations`, {
+    const arkResponse = await fetch('https://ark.cn-beijing.volces.com/api/v3/images/generations', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ARK_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: IMAGE_MODEL,
+        model,
         prompt: variedPrompt,
         size: sizeVal,
         watermark: true,
@@ -53,10 +55,7 @@ async function generateSingleImage(prompt: string, sizeVal: string, variation: s
     }
 
     const arkData = await arkResponse.json()
-    if (arkData.data?.[0]?.url) {
-      return arkData.data[0].url
-    }
-    return null
+    return arkData.data?.[0]?.url ?? null
   } catch (error) {
     console.error('[Generate] Single image error:', error)
     return null
@@ -64,6 +63,17 @@ async function generateSingleImage(prompt: string, sizeVal: string, variation: s
 }
 
 export async function POST(request: NextRequest) {
+  // 延迟读取环境变量，避免编译时未定义导致错误
+  const apiKey = process.env.ARK_API_KEY
+  if (!apiKey) {
+    return NextResponse.json(
+      { code: 'CONFIG_ERROR', message: '服务未配置 API Key' },
+      { status: 500 },
+    )
+  }
+
+  const model = process.env.IMAGE_MODEL || 'doubao-seedream-5-0-260128'
+
   try {
     const body = await request.json()
     const { prompt, size = '1:1', style = 'fresh', count = 4 } = body
@@ -77,7 +87,7 @@ export async function POST(request: NextRequest) {
     const enhancedPrompt = `${prompt}, ${stylePrompt}`
 
     const tasks = Array.from({ length: count }, (_, i) =>
-      generateSingleImage(enhancedPrompt, sizeVal, ANGLE_VARIATIONS[i % ANGLE_VARIATIONS.length] ?? ''),
+      generateSingleImage(apiKey, model, enhancedPrompt, sizeVal, ANGLE_VARIATIONS[i % ANGLE_VARIATIONS.length] ?? ''),
     )
 
     const results = await Promise.all(tasks)
