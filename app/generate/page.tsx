@@ -16,6 +16,7 @@ interface Result {
   emoji: string;
   label: string;
   colors: string[];
+  imageUrl: string;
 }
 
 export default function GeneratePage() {
@@ -24,44 +25,67 @@ export default function GeneratePage() {
   const [selectedSize, setSelectedSize] = useState("9:16");
   const [selectedStyle, setSelectedStyle] = useState("fresh");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [usage, setUsage] = useState(5);
+  const [usage, setUsage] = useState<number>(8);
   const [previewIdx, setPreviewIdx] = useState<number | null>(null);
+  const [error, setError] = useState("");
 
   const [results, setResults] = useState<Result[]>([
-    { state: "empty", emoji: "", label: "", colors: [] },
-    { state: "empty", emoji: "", label: "", colors: [] },
-    { state: "empty", emoji: "", label: "", colors: [] },
-    { state: "empty", emoji: "", label: "", colors: [] },
+    { state: "empty", emoji: "", label: "", colors: [], imageUrl: "" },
+    { state: "empty", emoji: "", label: "", colors: [], imageUrl: "" },
+    { state: "empty", emoji: "", label: "", colors: [], imageUrl: "" },
+    { state: "empty", emoji: "", label: "", colors: [], imageUrl: "" },
   ]);
 
-  const generateImages = () => {
+  const generateImages = async () => {
     if (usage <= 0) return;
     setIsGenerating(true);
+    setError("");
     setUsage((u) => u - 1);
 
-    const genData = [
-      { emoji: "🎨", label: "主图", colors: ["#FEF3C7", "#FDE68A", "#FCD34D"] },
-      { emoji: "🌈", label: "变体-角度", colors: ["#DBEAFE", "#BFDBFE", "#93C5FD"] },
-      { emoji: "✨", label: "变体-细节", colors: ["#FCE7F3", "#FBCFE8", "#F9A8D4"] },
-      { emoji: "🌟", label: "变体-全景", colors: ["#D1FAE5", "#A7F3D0", "#6EE7B7"] },
-    ];
+    setResults(results.map((r) => ({ ...r, state: "loading" as ResultState })));
 
-    setResults(results.map((r) => ({ ...r, state: "loading" })));
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt,
+          size: selectedSize,
+          style: selectedStyle,
+          count: 4,
+        }),
+      });
 
-    genData.forEach((item, idx) => {
-      setTimeout(() => {
-        setResults((prev) => {
-          const next = [...prev];
-          next[idx] = { state: "done", ...item };
-          return next;
-        });
-      }, 600 + idx * 300);
-    });
+      const data = await res.json();
 
-    setTimeout(() => {
-      setIsGenerating(false);
-      setUsage((u) => Math.min(u + 2, 8));
-    }, 2200);
+      if (!res.ok) {
+        setError(data.message || "生成失败");
+        setResults(results.map((r) => ({ ...r, state: "empty" as ResultState })));
+        setIsGenerating(false);
+        return;
+      }
+
+      const images: string[] = data.images || [];
+      const newResults = results.map((_, idx) => {
+        if (idx < images.length) {
+          return {
+            state: "done" as ResultState,
+            emoji: "",
+            label: `图片 ${idx + 1}`,
+            colors: [],
+            imageUrl: images[idx] ?? "",
+          };
+        }
+        return { state: "empty" as ResultState, emoji: "", label: "", colors: [], imageUrl: "" };
+      });
+
+      setResults(newResults);
+    } catch (err) {
+      setError("网络错误，请重试");
+      setResults(results.map((r) => ({ ...r, state: "empty" as ResultState })));
+    }
+
+    setIsGenerating(false);
   };
 
   return (
@@ -83,6 +107,15 @@ export default function GeneratePage() {
             disabled={isGenerating || !prompt.trim() || usage <= 0}
             onClick={generateImages}
           />
+
+          {error && (
+            <div
+              className="mt-3 text-center"
+              style={{ color: "var(--danger, #ef4444)", fontSize: "0.8rem" }}
+            >
+              {error}
+            </div>
+          )}
 
           <div
             className="mt-2 flex items-center justify-center gap-1.5"

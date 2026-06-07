@@ -4,7 +4,16 @@ const nextConfig: NextConfig = {
   devIndicators: {
     appIsrStatus: false,
   },
-  
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.volces.com',
+      },
+    ],
+  },
+
   // Configure webpack to ignore the external folder
   webpack: (config: any) => {
     config.watchOptions = {
