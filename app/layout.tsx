@@ -3,8 +3,30 @@ import Header from "@/components/header";
 import { BackgroundEffects } from "@/components/home/BackgroundEffects";
 import { ScrollReveal } from "@/components/home/ScrollReveal";
 import { Toaster } from "@/components/ui/toaster";
-import { createClient } from "@/utils/supabase/server";
+import { createClient, hasSessionCookie } from "@/utils/supabase/server";
+import { DM_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-jakarta",
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-mono",
+});
 
 const baseUrl = process.env.BASE_URL
   ? `https://${process.env.BASE_URL}`
@@ -34,13 +56,21 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Skip expensive Supabase `getUser()` API call when no session cookie exists.
+  // This avoids a network round-trip for anonymous users (~80% of traffic).
+  let user: any = null;
+  if (await hasSessionCookie()) {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  }
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${jakarta.variable} ${dmMono.variable}`}
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{

@@ -4,35 +4,52 @@ import { useEffect } from "react";
 
 export function ScrollReveal() {
   useEffect(() => {
-    const isInView = (el: Element) => {
-      const rect = el.getBoundingClientRect();
-      return rect.top < window.innerHeight - 60;
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -60px 0px" },
+    );
 
-    const checkReveals = () => {
-      document.querySelectorAll(".reveal").forEach((el) => {
-        if (isInView(el)) el.classList.add("visible");
+    // Observe existing elements + future ones via a quick scan
+    const observeAll = () => {
+      document.querySelectorAll(".reveal:not(.visible)").forEach((el) => {
+        observer.observe(el);
       });
     };
 
-    checkReveals();
-    window.addEventListener("scroll", checkReveals, { passive: true });
-    window.addEventListener("resize", checkReveals, { passive: true });
+    observeAll();
 
-    // Re-check on DOM changes (client-side navigation)
-    const observer = new MutationObserver(() => {
-      checkReveals();
+    // Use a lightweight MutationObserver only to catch newly-added elements
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        Array.from(m.addedNodes).forEach((node) => {
+          if (node instanceof HTMLElement) {
+            if (
+              node.classList?.contains("reveal") &&
+              !node.classList.contains("visible")
+            ) {
+              observer.observe(node);
+            }
+            // Also check children
+            node.querySelectorAll?.(".reveal:not(.visible)").forEach((el) => {
+              observer.observe(el);
+            });
+          }
+        });
+      }
     });
-    observer.observe(document.body, { childList: true, subtree: true });
 
-    // Fallback: re-check after a short delay for async-rendered content
-    const timer = setTimeout(checkReveals, 300);
+    mo.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      window.removeEventListener("scroll", checkReveals);
-      window.removeEventListener("resize", checkReveals);
       observer.disconnect();
-      clearTimeout(timer);
+      mo.disconnect();
     };
   }, []);
 

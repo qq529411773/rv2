@@ -27,3 +27,17 @@ export const createClient = async () => {
     },
   );
 };
+
+/**
+ * Check if Supabase session cookies exist without making an API call.
+ * Supabase uses cookies like `sb-<project-ref>-auth-token` for session storage.
+ * If no session cookie exists, we can skip the expensive `getUser()` network call.
+ */
+export const hasSessionCookie = async (): Promise<boolean> => {
+  const cookieStore = await cookies();
+  const all = cookieStore.getAll();
+  return all.some(
+    (c) =>
+      c.name.startsWith("sb-") && c.name.endsWith("-auth-token") && c.value
+  );
+};

@@ -16,46 +16,80 @@ export function BackgroundEffects() {
     const dot = document.getElementById("cursorDot");
     if (!glow || !dot) return;
 
-    let rafId: number;
+    let rafId = 0;
+    let idleTimer: ReturnType<typeof setTimeout>;
+    let isRunning = false;
     let mouseX = -500;
     let mouseY = -500;
     let glowX = -500;
     let glowY = -500;
+
+    const animate = () => {
+      glowX += (mouseX - glowX) * 0.08;
+      glowY += (mouseY - glowY) * 0.08;
+      glow.style.transform = `translate(${glowX}px, ${glowY}px)`;
+
+      // Stop RAF when glow has settled near cursor position
+      const dx = Math.abs(mouseX - glowX);
+      const dy = Math.abs(mouseY - glowY);
+      if (dx < 0.5 && dy < 0.5) {
+        isRunning = false;
+        return;
+      }
+
+      rafId = requestAnimationFrame(animate);
+    };
+
+    const startRaf = () => {
+      if (!isRunning) {
+        isRunning = true;
+        glow.style.opacity = "1";
+        rafId = requestAnimationFrame(animate);
+      }
+    };
 
     const onMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
       dot.style.opacity = "1";
       dot.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
+
+      startRaf();
+
+      // Stop RAF after 150ms of no mouse movement
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        if (isRunning) {
+          cancelAnimationFrame(rafId);
+          isRunning = false;
+        }
+      }, 150);
     };
 
     const onMouseLeave = () => {
       dot.style.opacity = "0";
       glow.style.opacity = "0";
+      if (isRunning) {
+        cancelAnimationFrame(rafId);
+        isRunning = false;
+      }
+      clearTimeout(idleTimer);
     };
 
     const onMouseEnter = () => {
       dot.style.opacity = "1";
     };
 
-    const animate = () => {
-      glowX += (mouseX - glowX) * 0.08;
-      glowY += (mouseY - glowY) * 0.08;
-      glow.style.opacity = "1";
-      glow.style.transform = `translate(${glowX}px, ${glowY}px)`;
-      rafId = requestAnimationFrame(animate);
-    };
-
     document.addEventListener("mousemove", onMouseMove, { passive: true });
     document.addEventListener("mouseleave", onMouseLeave);
     document.addEventListener("mouseenter", onMouseEnter);
-    rafId = requestAnimationFrame(animate);
 
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseleave", onMouseLeave);
       document.removeEventListener("mouseenter", onMouseEnter);
       cancelAnimationFrame(rafId);
+      clearTimeout(idleTimer);
     };
   }, [mounted]);
 
@@ -87,7 +121,7 @@ export function BackgroundEffects() {
       {/* Floating Orbs */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div
-          className="orb orb-1 absolute rounded-full will-change-transform"
+          className="orb orb-1 absolute rounded-full"
           style={{
             width: "500px",
             height: "500px",
@@ -98,7 +132,7 @@ export function BackgroundEffects() {
           }}
         />
         <div
-          className="orb orb-2 absolute rounded-full will-change-transform"
+          className="orb orb-2 absolute rounded-full"
           style={{
             width: "400px",
             height: "400px",
@@ -109,7 +143,7 @@ export function BackgroundEffects() {
           }}
         />
         <div
-          className="orb orb-3 absolute rounded-full will-change-transform"
+          className="orb orb-3 absolute rounded-full"
           style={{
             width: "350px",
             height: "350px",
