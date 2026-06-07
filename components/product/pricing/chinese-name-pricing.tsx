@@ -1,13 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useT } from "@/components/home/i18n";
 import { Badge } from "@/components/ui/badge";
-import { Check, Sparkles, Crown, Gift } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useUser } from "@/hooks/use-user";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useUser } from "@/hooks/use-user";
+import { motion } from "framer-motion";
+import { Check, Crown, Gift, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface PricingTier {
@@ -23,65 +24,55 @@ interface PricingTier {
   buttonVariant: "default" | "outline";
 }
 
-const pricingTiers: PricingTier[] = [
-  {
-    id: "free-trial",
-    name: "Free Trial",
-    price: "$0",
-    credits: 1,
-    description: "Perfect for trying out our service",
-    features: [
-      "1 free name generation",
-      "Basic name analysis",
-      "Cultural significance",
-      "Pinyin pronunciation",
-      "No registration required"
-    ],
-    icon: <Gift className="h-6 w-6" />,
-    buttonText: "Try Free",
-    buttonVariant: "outline"
-  },
-  {
-    id: "credit-pack",
-    name: "Credit Pack",
-    price: "$5",
-    credits: 1000,
-    description: "Best value for regular users",
-    features: [
-      "1000 credits included",
-      "Standard & Premium generation",
-      "Personality-based matching",
-      "Custom name preferences",
-      "Unlimited name variations",
-      "Save favorite names",
-      "Export to PDF"
-    ],
-    icon: <Crown className="h-6 w-6" />,
-    popular: true,
-    buttonText: "Purchase Credits",
-    buttonVariant: "default"
-  }
-];
-
 interface ChineseNamePricingProps {
   onScrollToForm?: () => void;
 }
 
-export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricingProps) {
+export default function ChineseNamePricing({
+  onScrollToForm,
+}: ChineseNamePricingProps) {
   const router = useRouter();
   const { user } = useUser();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
+  const t = useT("chineseName").pricing;
+
+  const pricingTiers: PricingTier[] = [
+    {
+      id: "free-trial",
+      name: t.freeTrial,
+      price: "$0",
+      credits: 1,
+      description: t.freeTrialDesc,
+      features: t.freeFeatures,
+      icon: <Gift className="h-6 w-6" />,
+      buttonText: t.tryFree,
+      buttonVariant: "outline",
+    },
+    {
+      id: "credit-pack",
+      name: t.creditPack,
+      price: "$5",
+      credits: 1000,
+      description: t.creditPackDesc,
+      features: t.creditFeatures,
+      icon: <Crown className="h-6 w-6" />,
+      popular: true,
+      buttonText: t.purchaseCredits,
+      buttonVariant: "default",
+    },
+  ];
 
   const handlePurchase = async (tierId: string) => {
     if (tierId === "free-trial") {
-      // Call the scroll to form function if provided, otherwise scroll to form section
       if (onScrollToForm) {
         onScrollToForm();
       } else {
-        const formSection = document.querySelector('[data-name-generator-form]');
+        const formSection = document.querySelector(
+          "[data-name-generator-form]",
+        );
         if (formSection) {
-          formSection.scrollIntoView({ behavior: 'smooth' });
+          formSection.scrollIntoView({ behavior: "smooth" });
         }
       }
       return;
@@ -89,48 +80,45 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
 
     if (!user) {
       toast({
-        title: "Sign In Required",
-        description: "Please sign in to purchase credits.",
+        title: t.signInRequired,
+        description: t.signInRequiredDesc,
         variant: "destructive",
       });
-      router.push('/sign-in');
+      router.push("/sign-in");
       return;
     }
 
     setIsProcessing(tierId);
-    
+
     try {
-      // Integration with the starter kit's payment system
-      // This would use the existing Creem.io integration
-      const response = await fetch('/api/creem/create-checkout', {
-        method: 'POST',
+      const response = await fetch("/api/creem/create-checkout", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productType: 'chinese-name-credits',
-          quantity: 1000, // 1000 credits
+          productType: "chinese-name-credits",
+          quantity: 1000,
           userId: user.id,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+        throw new Error("Failed to create checkout session");
       }
 
       const { checkoutUrl } = await response.json();
-      
+
       if (checkoutUrl) {
         window.location.href = checkoutUrl;
       } else {
-        throw new Error('No checkout URL received');
+        throw new Error("No checkout URL received");
       }
-      
     } catch (error) {
-      console.error('Payment error:', error);
+      console.error("Payment error:", error);
       toast({
-        title: "Payment Failed",
-        description: "Failed to process payment. Please try again.",
+        title: t.paymentFailed,
+        description: t.paymentFailedDesc,
         variant: "destructive",
       });
     } finally {
@@ -139,7 +127,10 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
   };
 
   return (
-    <section id="chinese-name-pricing" className="w-full py-20 bg-gradient-to-b from-background to-muted/20">
+    <section
+      id="chinese-name-pricing"
+      className="w-full py-20 bg-gradient-to-b from-background to-muted/20"
+    >
       <div className="container px-4 md:px-6">
         <div className="mx-auto max-w-6xl space-y-12">
           {/* Header */}
@@ -150,10 +141,10 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
             className="text-center space-y-4"
           >
             <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-              Choose Your Plan
+              {t.title}
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
-              Start with a free trial or get the best value with our credit pack for unlimited Chinese name generation
+              {t.subtitle}
             </p>
           </motion.div>
 
@@ -171,31 +162,41 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <Badge className="bg-primary text-primary-foreground px-4 py-1">
                       <Sparkles className="h-3 w-3 mr-1" />
-                      Most Popular
+                      {t.mostPopular}
                     </Badge>
                   </div>
                 )}
-                
-                <Card className={`h-full transition-all duration-300 hover:shadow-lg ${
-                  tier.popular 
-                    ? 'border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10' 
-                    : 'border border-border hover:border-primary/20'
-                }`}>
+
+                <Card
+                  className={`h-full transition-all duration-300 hover:shadow-lg ${
+                    tier.popular
+                      ? "border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10"
+                      : "border border-border hover:border-primary/20"
+                  }`}
+                >
                   <CardHeader className="text-center pb-4">
                     <div className="flex items-center justify-center mb-4">
-                      <div className={`p-3 rounded-full ${
-                        tier.popular ? 'bg-primary/10' : 'bg-muted'
-                      }`}>
-                        <div className={tier.popular ? 'text-primary' : 'text-muted-foreground'}>
+                      <div
+                        className={`p-3 rounded-full ${
+                          tier.popular ? "bg-primary/10" : "bg-muted"
+                        }`}
+                      >
+                        <div
+                          className={
+                            tier.popular
+                              ? "text-primary"
+                              : "text-muted-foreground"
+                          }
+                        >
                           {tier.icon}
                         </div>
                       </div>
                     </div>
-                    
+
                     <CardTitle className="text-2xl font-bold text-foreground">
                       {tier.name}
                     </CardTitle>
-                    
+
                     <div className="space-y-2">
                       <div className="flex items-baseline justify-center gap-1">
                         <span className="text-5xl font-bold text-foreground">
@@ -207,7 +208,7 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
                           </span>
                         )}
                       </div>
-                      
+
                       <p className="text-muted-foreground">
                         {tier.description}
                       </p>
@@ -218,13 +219,22 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
                     {/* Features List */}
                     <div className="space-y-3">
                       {tier.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-start gap-3">
-                          <div className={`mt-0.5 p-1 rounded-full ${
-                            tier.popular ? 'bg-primary/10' : 'bg-muted'
-                          }`}>
-                            <Check className={`h-3 w-3 ${
-                              tier.popular ? 'text-primary' : 'text-muted-foreground'
-                            }`} />
+                        <div
+                          key={featureIndex}
+                          className="flex items-start gap-3"
+                        >
+                          <div
+                            className={`mt-0.5 p-1 rounded-full ${
+                              tier.popular ? "bg-primary/10" : "bg-muted"
+                            }`}
+                          >
+                            <Check
+                              className={`h-3 w-3 ${
+                                tier.popular
+                                  ? "text-primary"
+                                  : "text-muted-foreground"
+                              }`}
+                            />
                           </div>
                           <span className="text-muted-foreground text-sm leading-relaxed">
                             {feature}
@@ -241,14 +251,14 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
                         variant={tier.buttonVariant}
                         className={`w-full h-12 text-lg font-medium transition-all duration-200 ${
                           tier.popular
-                            ? 'bg-primary hover:bg-primary/90 text-primary-foreground'
-                            : 'border-primary/20 text-primary hover:bg-primary/5'
+                            ? "bg-primary hover:bg-primary/90 text-primary-foreground"
+                            : "border-primary/20 text-primary hover:bg-primary/5"
                         }`}
                       >
                         {isProcessing === tier.id ? (
                           <div className="flex items-center gap-2">
                             <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                            Processing...
+                            {t.processing}
                           </div>
                         ) : (
                           tier.buttonText
@@ -260,7 +270,7 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
                     {tier.id === "credit-pack" && (
                       <div className="text-center pt-2">
                         <p className="text-sm text-muted-foreground">
-                          Only $0.005 per credit • Amazing value!
+                          {t.perCredit}
                         </p>
                       </div>
                     )}
@@ -278,27 +288,25 @@ export default function ChineseNamePricing({ onScrollToForm }: ChineseNamePricin
             className="text-center space-y-4 pt-8"
           >
             <h3 className="text-xl font-semibold text-foreground">
-              Questions about pricing?
+              {t.questions}
             </h3>
-            <p className="text-muted-foreground">
-              Credits never expire and can be used for both Standard (1 credit) and Premium (4 credits) generations.
-            </p>
+            <p className="text-muted-foreground">{t.creditsDesc}</p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Check className="h-3 w-3 text-green-500" />
-                Secure payments
+                {t.securePayments}
               </span>
               <span className="flex items-center gap-1">
                 <Check className="h-3 w-3 text-green-500" />
-                Instant credit delivery
+                {t.instantDelivery}
               </span>
               <span className="flex items-center gap-1">
                 <Check className="h-3 w-3 text-green-500" />
-                24/7 support
+                {t.support}
               </span>
               <span className="flex items-center gap-1">
                 <Check className="h-3 w-3 text-green-500" />
-                Money-back guarantee
+                {t.moneyBack}
               </span>
             </div>
           </motion.div>

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useT } from "@/components/home/i18n";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,7 +27,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useCredits } from "@/hooks/use-credits";
-import { useSubscription } from "@/hooks/use-subscription";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 
@@ -60,8 +60,8 @@ export default function NameGeneratorForm({
 }: NameGeneratorFormProps) {
   const { toast } = useToast();
   const { user } = useUser();
-  const subscriptionData = useSubscription();
   const { credits: userCredits, loading: creditsLoading } = useCredits();
+  const t = useT("chineseName").generator;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -89,9 +89,8 @@ export default function NameGeneratorForm({
       });
 
       toast({
-        title: "Welcome back!",
-        description:
-          "Your previous form data has been restored. You can modify it and generate again.",
+        title: t.welcomeBack,
+        description: t.welcomeBackDesc,
       });
     }
   }, [savedFormData, form, toast]);
@@ -101,8 +100,8 @@ export default function NameGeneratorForm({
       await onGenerate(values);
     } catch (error) {
       toast({
-        title: "Generation Failed",
-        description: "Failed to generate name. Please try again.",
+        title: t.genFailed,
+        description: t.genFailedDesc,
       });
     }
   }
@@ -110,9 +109,8 @@ export default function NameGeneratorForm({
   const handlePremiumFeatureClick = () => {
     if (!user) {
       toast({
-        title: "Premium Feature",
-        description:
-          "Please sign in to access personality traits and name preferences.",
+        title: t.premiumFeature,
+        description: t.premiumFeatureDesc,
       });
     }
   };
@@ -131,13 +129,8 @@ export default function NameGeneratorForm({
     >
       <Card className="shadow-lg border border-border">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">
-            Generate Your Chinese Name
-          </CardTitle>
-          <CardDescription>
-            Tell us about yourself and let our AI create a name that resonates
-            with your identity.
-          </CardDescription>
+          <CardTitle className="text-2xl font-bold">{t.cardTitle}</CardTitle>
+          <CardDescription>{t.cardDescription}</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -145,11 +138,11 @@ export default function NameGeneratorForm({
             {/* Your Name Field */}
             <div className="space-y-2">
               <Label htmlFor="englishName" className="text-base font-medium">
-                Your Name <span className="text-destructive">*</span>
+                {t.yourName} <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="englishName"
-                placeholder="Enter your name"
+                placeholder={t.enterName}
                 className="h-12 text-base"
                 {...form.register("englishName")}
               />
@@ -157,17 +150,16 @@ export default function NameGeneratorForm({
                 {user ? (
                   <>
                     <span>
-                      Credits: {creditsLoading ? "Loading..." : currentCredits}
+                      {t.credits}:{" "}
+                      {creditsLoading ? "Loading..." : currentCredits}
                     </span>
                     <span className="text-primary">|</span>
-                    <span>Ready to generate!</span>
+                    <span>{t.ready}</span>
                   </>
                 ) : (
                   <>
-                    <span>🎁 Free Trial Available</span>
-                    <span className="text-primary">
-                      No registration required!
-                    </span>
+                    <span>{t.freeTrialAvailable}</span>
+                    <span className="text-primary">{t.noRegistration}</span>
                   </>
                 )}
               </div>
@@ -180,7 +172,7 @@ export default function NameGeneratorForm({
 
             {/* Gender Field */}
             <div className="space-y-2">
-              <Label className="text-base font-medium">Gender</Label>
+              <Label className="text-base font-medium">{t.gender}</Label>
               <Select
                 onValueChange={(value) =>
                   form.setValue("gender", value as "male" | "female" | "other")
@@ -188,12 +180,12 @@ export default function NameGeneratorForm({
                 defaultValue={form.getValues("gender")}
               >
                 <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Select gender" />
+                  <SelectValue placeholder={t.selectGender} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="male">{t.male}</SelectItem>
+                  <SelectItem value="female">{t.female}</SelectItem>
+                  <SelectItem value="other">{t.other}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -201,7 +193,7 @@ export default function NameGeneratorForm({
             {/* Birth Year Field */}
             <div className="space-y-2">
               <Label htmlFor="birthYear" className="text-base font-medium">
-                Birth Year (Optional)
+                {t.birthYear}
               </Label>
               <Input
                 id="birthYear"
@@ -218,16 +210,16 @@ export default function NameGeneratorForm({
                 htmlFor="personalityTraits"
                 className="text-base font-medium flex items-center justify-between"
               >
-                <span>Personality Traits</span>
+                <span>{t.personalityTraits}</span>
                 {!user && (
                   <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
-                    Premium
+                    {t.premium}
                   </span>
                 )}
               </Label>
               <Textarea
                 id="personalityTraits"
-                placeholder="Describe your personality traits..."
+                placeholder={t.personalityPlaceholder}
                 className="min-h-[100px]"
                 onClick={!user ? handlePremiumFeatureClick : undefined}
                 readOnly={!user}
@@ -241,16 +233,16 @@ export default function NameGeneratorForm({
                 htmlFor="namePreferences"
                 className="text-base font-medium flex items-center justify-between"
               >
-                <span>Name Preferences</span>
+                <span>{t.namePreferences}</span>
                 {!user && (
                   <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
-                    Premium
+                    {t.premium}
                   </span>
                 )}
               </Label>
               <Textarea
                 id="namePreferences"
-                placeholder="Any specific preferences for your Chinese name..."
+                placeholder={t.namePreferencesPlaceholder}
                 className="min-h-[100px]"
                 onClick={!user ? handlePremiumFeatureClick : undefined}
                 readOnly={!user}
@@ -260,7 +252,9 @@ export default function NameGeneratorForm({
 
             {/* Plan Type Selection */}
             <div className="space-y-4">
-              <Label className="text-base font-medium">Generation Type</Label>
+              <Label className="text-base font-medium">
+                {t.generationType}
+              </Label>
               <RadioGroup
                 onValueChange={(value) =>
                   form.setValue("planType", value as "1" | "4")
@@ -274,7 +268,7 @@ export default function NameGeneratorForm({
                     htmlFor="standard"
                     className="font-medium cursor-pointer flex-grow"
                   >
-                    Standard (1 Credit)
+                    {t.standard}
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2 px-4 py-3 bg-muted/50 rounded-lg hover:bg-muted/70 transition-colors">
@@ -283,7 +277,7 @@ export default function NameGeneratorForm({
                     htmlFor="premium"
                     className="font-medium cursor-pointer flex-grow"
                   >
-                    Premium (4 Credits)
+                    {t.premiumPlan}
                   </Label>
                 </div>
               </RadioGroup>
@@ -292,32 +286,34 @@ export default function NameGeneratorForm({
             {/* Submit Button */}
             <Button
               type="submit"
-              disabled={isGenerating || Boolean(user && hasEnoughCredits === false)}
+              disabled={
+                isGenerating || Boolean(user && hasEnoughCredits === false)
+              }
               className="w-full h-14 text-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
             >
               {isGenerating ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Generating...
+                  {t.generating}
                 </div>
               ) : user ? (
                 hasEnoughCredits ? (
                   <>
-                    Generate Name
+                    {t.generate}
                     <span className="ml-2 text-base opacity-80">
                       ({creditCost} Credits)
                     </span>
                   </>
                 ) : (
-                  "Insufficient Credits"
+                  t.insufficientCredits
                 )
               ) : hasTriedFree ? (
-                "Sign Up for More"
+                t.signUp
               ) : (
                 <>
-                  🎁 Try Free Generation
+                  {t.freeTrial}
                   <span className="ml-2 text-base opacity-80">
-                    (No Login Required)
+                    ({t.noLogin})
                   </span>
                 </>
               )}
