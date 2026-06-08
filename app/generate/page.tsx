@@ -7,7 +7,7 @@ import { SizeSelector } from "@/components/generate/SizeSelector";
 import { StyleSelector } from "@/components/generate/StyleSelector";
 import { UsageBadge } from "@/components/generate/UsageBadge";
 import { useT } from "@/components/home/i18n";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const EMPTY_RESULTS: Result[] = [
   { state: "empty", imageUrl: "", label: "" },
@@ -28,6 +28,22 @@ export default function GeneratePage() {
   const [previewIdx, setPreviewIdx] = useState<number | null>(null);
   const [results, setResults] = useState<Result[]>(EMPTY_RESULTS);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const promptRef = useRef<HTMLDivElement>(null);
+
+  // 从模板页面跳转过来时，自动填入 prompt 并滚动到描述图片位置
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const promptFromUrl = params.get("prompt");
+    if (promptFromUrl) {
+      setPrompt(promptFromUrl);
+      setTimeout(() => {
+        promptRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
+    }
+  }, []);
 
   const generateImages = async () => {
     if (usage <= 0 || !prompt.trim()) return;
@@ -89,7 +105,9 @@ export default function GeneratePage() {
             <UsageBadge usage={usage} max={8} />
           </div>
 
-          <PromptInput prompt={prompt} onChange={setPrompt} />
+          <div ref={promptRef}>
+            <PromptInput prompt={prompt} onChange={setPrompt} />
+          </div>
           <SizeSelector selected={selectedSize} onChange={setSelectedSize} />
           <StyleSelector selected={selectedStyle} onChange={setSelectedStyle} />
 

@@ -8,12 +8,12 @@ interface Chip {
 }
 
 const chips: Chip[] = [
-  { label: "tropical", prompt: "Tropical beach at sunset, palm trees, vivid colors, 8K" },
-  { label: "product", prompt: "Product photography, white background, studio lighting" },
-  { label: "cover", prompt: "Video cover, bold composition, vibrant, focal point" },
-  { label: "food", prompt: "Food close-up, warm tones, appetizing, shallow DOF" },
-  { label: "fashion", prompt: "Fashion outfit, street style, natural light" },
-  { label: "travel", prompt: "Travel landscape, drone view, turquoise water" },
+  { label: "tropical", prompt: "Tropical beach, sunset glow, palm trees, turquoise ocean, golden hour, vivid colors, cinematic lighting, 8K ultra HD" },
+  { label: "product", prompt: "Product photography, pure white background, studio lighting, soft shadow, high-end commercial, sharp focus, elegant composition" },
+  { label: "cover", prompt: "Short video cover, bold composition, vibrant contrast, eye-catching focal point, YouTube thumbnail style, clean text space, modern aesthetic" },
+  { label: "food", prompt: "Food close-up, warm tones, steam rising, appetizing plating, shallow depth of field, natural window light, rustic wooden table" },
+  { label: "fashion", prompt: "Fashion outfit, street style, natural sunlight, urban background, candid pose, editorial photography, soft bokeh, muted tones" },
+  { label: "travel", prompt: "Travel landscape, aerial drone view, crystal clear water, golden light, majestic mountains, wanderlust vibe, National Geographic style" },
 ];
 
 interface PromptInputProps {
